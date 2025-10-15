@@ -168,13 +168,13 @@ pre { background: #1e1e1e; color: #f5f5f5; padding: var(--space-3) var(--space-4
 body.prompt-mode .prompt-bar { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; }
 body.conversation-mode .prompt-bar { position: sticky; bottom: 0; left: 0; right: 0; background: var(--color-bg-page); display: flex; justify-content: center; align-items: center; min-height: 184px; }
 
-.composer-container { width: var(--layout-composer); height: 184px; max-width: 100%; display: flex; align-items: center; justify-content: center; }
+.composer-container { width: var(--layout-composer); max-width: 100%; display: flex; align-items: flex-end; justify-content: center; padding-top: 24px; box-sizing: border-box; }
 .prompt-composer { width: var(--layout-composer-inner); max-width: 100%; display: flex; align-items: flex-end; gap: 0; background: transparent; }
 .prompt-track { margin: 0 16px; }
 .prompt-track { position: relative; flex: 1; display: flex; align-items: flex-end; }
 /* Prompt input now fluid via var(--fs-800); line-height uses ratios so it scales automatically */
 /* Prompt input uses dedicated prompt line-heights to avoid caret overlap (fs-800 20→32 vs line-height 28→44) */
-.prompt-input { flex: 1; resize: none; border: none; background: transparent; font: inherit; font-size: var(--fs-800); line-height: var(--lh-prompt); outline: none; padding: 0 40px 6px 0; border-bottom: 1px solid #1F1F1F; color: #1F1F1F; }
+.prompt-input { flex: 1; resize: none; border: none; background: transparent; font: inherit; font-size: var(--fs-800); line-height: var(--lh-prompt); outline: none; padding: 0 40px 6px 0; border-bottom: 1px solid #1F1F1F; color: #1F1F1F; overflow: hidden; }
 .prompt-input.multi-line { line-height: var(--lh-prompt-wrap); }
 /* Conversation mode overrides: 20/24 base, 20/28 multiline */
 body.conversation-mode .prompt-input { font-size: var(--fs-500); line-height: var(--lh-prompt); color: #1F1F1F; }
