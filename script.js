@@ -8,22 +8,27 @@ const vpWidthEl = document.getElementById('vpWidth');
 
 const arrowUpSvg = `\n<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">\n  <path d="M3.13171 9.16142C2.94553 9.36536 2.95993 9.68162 3.16387 9.8678C3.36781 10.054 3.68407 10.0396 3.87025 9.83564L9.50098 3.66779L9.50098 17.4985C9.50098 17.7747 9.72483 17.9985 10.001 17.9985C10.2771 17.9985 10.501 17.7747 10.501 17.4985L10.501 3.67068L16.1291 9.83564C16.3152 10.0396 16.6315 10.054 16.8354 9.8678C17.0394 9.68162 17.0538 9.36536 16.8676 9.16142L10.5536 2.24507C10.4258 2.10512 10.2583 2.02529 10.0851 2.00558C10.0578 2.00095 10.0296 1.99854 10.001 1.99854C9.9741 1.99854 9.94773 2.00066 9.922 2.00474C9.7461 2.02291 9.57544 2.10302 9.44576 2.24507L3.13171 9.16142Z" fill="white"/>\n</svg>`;
 
-function autoResize() {
-  // Allow unrestricted vertical growth (no internal scroll clipping)
+function autoResize(enforceFrames = 0) {
+  // Compute current line-height (snapped/clamped) instead of static constant
+  const lh = parseFloat(getComputedStyle(input).lineHeight) || 40;
+  // Reset to auto then apply new height
   input.style.height = 'auto';
   const fullScrollHeight = input.scrollHeight;
   input.style.height = fullScrollHeight + 'px';
-  // Prevent internal scroll positioning from hiding top lines
   input.scrollTop = 0;
-  const singleLineHeight = 40; // approximate single-line height baseline
-  if (input.scrollHeight > singleLineHeight * 1.25) {
+  // Toggle multi-line when more than ~1.25 lines
+  if (fullScrollHeight > lh * 1.25) {
     input.classList.add('multi-line');
   } else {
     input.classList.remove('multi-line');
   }
+  // Frame loop enforcement to defeat late font/layout adjustments (Pages cache)
+  if (enforceFrames > 0) {
+    requestAnimationFrame(() => autoResize(enforceFrames - 1));
+  }
 }
 input.addEventListener('input', () => {
-  autoResize();
+  autoResize(3); // enforce for a few frames after input
   const hasText = input.value.trim().length > 0;
   if (hasText) {
     eqSendBtn.classList.add('active');
@@ -49,7 +54,7 @@ input.addEventListener('input', () => {
 
 // Run initial sizing on load so placeholder line fits
 document.addEventListener('DOMContentLoaded', () => {
-  autoResize();
+  autoResize(5); // initial multi-frame enforcement
   // Observe changes to content via mutations (in case scripts inject text)
   const observer = new MutationObserver(()=> autoResize());
   observer.observe(input, { characterData: true, subtree: true, childList: true });
@@ -57,14 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Adjust again when window resizes (viewport width may change line-height clamp)
 window.addEventListener('resize', () => {
-  autoResize();
+  autoResize(2);
 });
 
 // Additional events that may change scrollHeight without input event firing
 ['keyup','paste','cut'].forEach(evt => {
   input.addEventListener(evt, () => {
-    // Use microtask to wait for value update after paste/cut
-    queueMicrotask(autoResize);
+    queueMicrotask(() => autoResize(3));
   });
 });
 
