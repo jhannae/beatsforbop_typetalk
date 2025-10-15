@@ -57,8 +57,6 @@
   /* Prompt input (uses fs-800 20→32) needs larger leading than subheading-sm */
   --lh-prompt: clamp(24px, 2.1vw, 36px); /* balanced: tighter min, lower max */
   --lh-prompt-wrap: clamp(28px, 2.4vw, 40px);
-  /* Conversation-mode smaller prompt (fs-500 18→20) */
-  --lh-prompt-sm: clamp(24px, 2vw, 32px);
   /* Headings */
   --lh-h5: clamp(16px, 2.22vw, 32px); /* 14->28 size */
   --lh-h5-wrap: clamp(20px, 2.5vw, 36px);
@@ -179,8 +177,8 @@ body.conversation-mode .prompt-bar { position: sticky; bottom: 0; left: 0; right
 .prompt-input { flex: 1; resize: none; border: none; background: transparent; font: inherit; font-size: var(--fs-800); line-height: var(--lh-prompt); height: var(--lh-prompt); /* ensure initial baseline alignment */ outline: none; padding: 0 40px 6px 0; border-bottom: 1px solid #1F1F1F; color: #1F1F1F; overflow: hidden; /* prevent internal scrollbars */ }
 .prompt-input.multi-line { line-height: var(--lh-prompt-wrap); }
 /* Conversation mode overrides: 20/24 base, 20/28 multiline */
-body.conversation-mode .prompt-input { font-size: var(--fs-500); line-height: var(--lh-prompt-sm); height: var(--lh-prompt-sm); color: #1F1F1F; }
-body.conversation-mode .prompt-input.multi-line { line-height: var(--lh-prompt-wrap); }
+body.conversation-mode .prompt-input { font-size: var(--fs-500); line-height: var(--lh-subheading-sm); height: var(--lh-subheading-sm); color: #1F1F1F; }
+body.conversation-mode .prompt-input.multi-line { line-height: var(--lh-subheading-sm-wrap); height: var(--lh-subheading-sm-wrap); }
 .prompt-input::placeholder { color: var(--color-text-subtle); }
 
 .icon-btn { border: none; background: transparent; cursor: pointer; font-size: 16px; line-height: 1; color: #393939; padding: var(--space-1); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; }
