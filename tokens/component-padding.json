@@ -1,0 +1,18 @@
+{
+  "$schema": "https://example.com/token.schema.json",
+  "comment": "Semantic padding presets mapping roles to atomic padding tokens or custom definitions.",
+  "componentPadding": {
+    "chat.bubble.short": { "ref": "padding.inset-sm" },
+    "chat.bubble.long": { "x": "{space.md}", "y": "{space.sm}" },
+    "chat.bubble.streaming": { "x": "{space.md}", "y": "{space.xs}" },
+    "table.cell.compact": { "x": "{space.sm}", "y": "{space.xs}" },
+    "table.cell.standard": { "x": "{space.md}", "y": "{space.xs}" },
+    "table.cell.reading": { "x": "{space.md}", "y": "{space.sm}" },
+    "table.header": { "x": "{space.md}", "y": "{space.sm}" },
+    "code.block": { "x": "{space.md}", "y": "{space.sm}" },
+    "blockquote": { "x": "{space.md}", "y": "{space.sm}" },
+    "stat.hero": { "x": "{space.lg}", "y": "{space.md}" },
+    "chip": { "x": "{space.sm}", "y": "{space.xs}" },
+    "identity.label": { "x": "{space.xs}", "y": "{space.xs}" }
+  }
+}

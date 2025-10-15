@@ -1,0 +1,80 @@
+{
+  "$schema": "https://example.com/typography.schema.json",
+  "meta": {
+    "version": "1.0.0",
+    "description": "Core typography tokens including size, line-height, and variant rules."
+  },
+  "sizes": {
+    "200": { "px": 12 },
+    "300": { "px": 14 },
+    "400": { "px": 16 },
+    "450": { "px": 18, "adaptive": true },
+    "500": { "px": 20 },
+    "600": { "px": 24 },
+    "700": { "px": 28 },
+    "800": { "px": 32 },
+    "900": { "px": 40 },
+    "950": { "px": 48, "reserved": true },
+    "1000": { "px": 56 }
+  },
+  "lineHeights": {
+    "caption": {
+      "ratio": 1.333,
+      "minPx": 16,
+      "roundTo": 4,
+      "applyToSizes": ["200"]
+    },
+    "body": {
+      "ratio": 1.5,
+      "minPx": 20,
+      "roundTo": 4,
+      "applyToSizes": ["300", "400", "450", "500"]
+    },
+    "code": {
+      "ratio": 1.5,
+      "minPx": 20,
+      "roundTo": 4,
+      "applyToSizes": ["300", "400", "450", "500"]
+    },
+    "heading": {
+      "ratio": 1.25,
+      "minPx": 28,
+      "roundTo": 4,
+      "applyToSizes": ["600", "700", "800", "900", "950"]
+    },
+    "display": {
+      "ratio": 1.142,
+      "minPx": 60,
+      "roundTo": 4,
+      "applyToSizes": ["1000"]
+    }
+  },
+  "variants": {
+    "bodyLoosen": {
+      "base": "body",
+      "extraRatio": 0.10,
+      "minDeltaPx": 4,
+      "capDeltaPx": 12,
+      "description": "Adds breathing room for dense paragraphs or streaming text. Ensures at least 4px more than base unless hitting cap." 
+    },
+    "headingWrap": {
+      "base": "heading",
+      "extraRatio": 0.05,
+      "minDeltaPx": 2,
+      "capDeltaPx": 8,
+      "description": "Slightly increases line-height when headings wrap to 2+ lines." 
+    },
+    "displayWrap": {
+      "base": "display",
+      "extraRatio": 0.05,
+      "minDeltaPx": 4,
+      "capDeltaPx": 12,
+      "description": "Adds legibility for multi-line display text." 
+    }
+  },
+  "rules": {
+    "computeLineHeight": "Given sizePx S and style base with ratio R: candidate = roundToGrid(max(minPx, S * R)). For variant: variantCandidate = roundToGrid(min(baseLH + capDeltaPx, max(baseLH + minDeltaPx, max(minPx, S * (R + extraRatio))))) ensuring variantCandidate > baseLH unless capped.",
+    "roundToGrid": "Round to nearest multiple of roundTo (default 4). If equidistant, round up.",
+    "fallback": "If a size lacks mapping for the requested style, fallback chain: body -> caption (smaller) or heading -> body (larger)."
+  }
+}

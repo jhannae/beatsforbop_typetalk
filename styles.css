@@ -1,0 +1,216 @@
+/* Font faces: reference variable first, fall back to static weights.
+   Place actual licensed font files in /fonts (not committed if proprietary).
+*/
+/* Aptos font family (local TTFs in ./fonts/aptos). Using available cuts; removed invalid/nonexistent woff2 references. */
+@font-face { font-family: 'Aptos'; src: url('./fonts/aptos/Aptos-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Aptos'; src: url('./fonts/aptos/Aptos.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Aptos'; src: url('./fonts/aptos/Aptos-SemiBold.ttf') format('truetype'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Aptos'; src: url('./fonts/aptos/Aptos-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Aptos'; src: url('./fonts/aptos/Aptos-ExtraBold.ttf') format('truetype'); font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Aptos'; src: url('./fonts/aptos/Aptos-Black.ttf') format('truetype'); font-weight: 900; font-style: normal; font-display: swap; }
+/* Aptos Mono (placeholder). Provide actual files in /fonts */
+@font-face { font-family: 'Aptos Mono'; src: url('./fonts/aptos/Aptos-Mono.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Aptos Mono'; src: url('./fonts/aptos/Aptos-Mono-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+
+:root {
+  /* Color palette (updated per spec: all white background; grey user bubble) */
+  --color-bg-page: #FFFFFF; /* whole experience */
+  --color-bg-surface: #FFFFFF; /* AI (left) bubble & panels */
+  --color-bg-user: #F5F5F5; /* user (right) bubble */
+  --color-border-soft: #3B3B3B33; /* subtle divider using provided border color with translucency */
+  --color-border-strong: #3B3B3B; /* explicit when needed */
+  --color-text: #1F1F1F; /* composer active text */
+  --color-text-convo: #424242; /* conversation body text */
+  --color-text-subtle: #5a5d62;
+  --color-accent: #6366f1; /* placeholder for interactive accent if needed */
+  --radius-panel: 12px;
+  --radius-bubble: 12px; /* updated per latest spec */
+
+  /* Typography size tokens (px) */
+  /* Fluid typography tokens using clamp(MIN, VW, MAX) @ max width 1440px */
+  --fs-200: 12px; /* caption small fixed */
+  --fs-300: 14px; /* caption large fixed */
+  --fs-400: clamp(0.875rem, 1.5vw, 1rem); /* body 14→16 */
+  --fs-450: 18px; /* bodyPlus fixed */
+  --fs-500: clamp(1.125rem, 1.4vw, 1.25rem); /* 18→20 subheading-sm */
+  --fs-600: clamp(1.125rem, 1.67vw, 1.5rem); /* 18→24 subheading */
+  --fs-700: clamp(0.875rem, 2vw, 1.75rem); /* 14→28 mid heading */
+  --fs-800: clamp(1.25rem, 2.22vw, 2rem); /* 20→32 heading */
+  --fs-900: clamp(1.5rem, 2.78vw, 2.5rem); /* 24→40 heading */
+  --fs-950: clamp(1.8125rem, 3.33vw, 3rem); /* 29→48 (reserved large heading) */
+  --fs-1000: clamp(2.125rem, 3.9vw, 3.5rem); /* 34→56 display */
+
+  /* Snapped fluid line-height tokens (px) with clamp(min, vw, max) */
+  /* Small text fixed */
+  --lh-caption: 16px; /* 12 -> 16 */
+  --lh-caption-lg: 20px; /* 14 -> 20 */
+  /* Body text */
+  --lh-body: clamp(20px, 1.67vw, 24px); /* 14->16 font scaling mapped to 20->24 */
+  --lh-body-loosen: clamp(24px, 1.94vw, 28px); /* 24->28 */
+  --lh-bodyplus: 28px; /* fixed 18px size */
+  --lh-bodyplus-loosen: 32px; /* fixed */
+  /* Subheadings (20 / 24) */
+  --lh-subheading-sm: clamp(20px, 1.67vw, 24px);
+  --lh-subheading-sm-wrap: clamp(24px, 1.94vw, 28px);
+  --lh-subheading: clamp(20px, 1.94vw, 28px); /* 18->24 size */
+  --lh-subheading-wrap: clamp(24px, 2.22vw, 32px);
+  /* Prompt input (uses fs-800 20→32) needs larger leading than subheading-sm */
+  --lh-prompt: clamp(24px, 2.1vw, 36px); /* balanced: tighter min, lower max */
+  --lh-prompt-wrap: clamp(28px, 2.4vw, 40px);
+  /* Headings */
+  --lh-h5: clamp(16px, 2.22vw, 32px); /* 14->28 size */
+  --lh-h5-wrap: clamp(20px, 2.5vw, 36px);
+  --lh-h4: clamp(24px, 2.5vw, 36px); /* 20->32 size */
+  --lh-h4-wrap: clamp(28px, 2.78vw, 40px);
+  --lh-h3: clamp(28px, 3.06vw, 44px); /* 24->40 size */
+  --lh-h3-wrap: clamp(32px, 3.33vw, 48px);
+  --lh-h2: clamp(32px, 3.61vw, 52px); /* 29->48 size */
+  --lh-h2-wrap: clamp(36px, 3.89vw, 56px);
+  --lh-display: clamp(36px, 4.17vw, 60px); /* 34->56 */
+  --lh-display-wrap: clamp(40px, 4.44vw, 64px);
+  /* Code blocks keep generous fixed line-height */
+  --lh-code: clamp(20px, 1.67vw, 24px);
+
+  /* Spacing scale (vertical v* / horizontal h* unify) */
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: clamp(20px, 2.22vw, 32px); /* fluid large spacing */
+  --space-8: clamp(26px, 2.78vw, 40px);
+  --space-9: clamp(31px, 3.33vw, 48px);
+  --space-10: clamp(36px, 3.89vw, 56px);
+
+  /* Shadows (placeholder) */
+  --shadow-elev-1: 0 1px 2px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.05);
+
+  /* Fluid layout widths */
+  --layout-convo: clamp(320px, 70vw, 772px);
+  --layout-composer: clamp(320px, 92vw, 1376px);
+  --layout-composer-inner: clamp(320px, 60vw, 864px);
+}
+
+html, body { height: 100%; margin: 0; padding: 0; font-family: 'Aptos', system-ui, sans-serif; background: var(--color-bg-page); color: var(--color-text-convo); -webkit-font-smoothing: antialiased; }
+
+body { display: flex; }
+.app { flex: 1; display: flex; flex-direction: column; }
+
+/* Viewport padding; internal layout widths differ by stage */
+.viewport { flex: 1; overflow-y: auto; padding: var(--space-7) 0 var(--space-7); box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
+
+/* Prompt stage: large empty panel width 864px */
+.viewport:empty::before { content: ''; display: block; height: 100%; width: 864px; border-radius: var(--radius-panel); background: var(--color-bg-surface); box-shadow: var(--shadow-elev-1); }
+
+/* Message bubbles (response screen) */
+/* Conversation stage width (fluid) */
+.conversation-width { width: var(--layout-convo); max-width: 100%; }
+
+.message-cluster { width: var(--layout-convo); max-width: 100%; margin: 0 auto var(--space-7); display: flex; }
+/* Updated orientation: AI on left, user on right */
+.message-cluster.user { justify-content: flex-end; }
+.message-cluster.ai { justify-content: flex-start; }
+
+.message-bubble { background: var(--color-bg-surface); border-radius: var(--radius-bubble); padding: var(--space-3) var(--space-4); line-height: var(--lh-body); font-size: var(--fs-400); box-shadow: var(--shadow-elev-1); max-width: 100%; }
+.message-cluster.user .message-bubble { background: var(--color-bg-user); max-width: 590px; }
+.message-cluster.ai .message-bubble { background: var(--color-bg-surface); box-shadow: none; }
+.message-bubble.long { padding-bottom: 32px; /* explicit per instruction */ line-height: var(--lh-body-loosen); }
+.message-bubble + .message-bubble { margin-top: var(--space-3); }
+
+/* Headings inside bubbles (example) */
+.message-bubble h2 { font-size: var(--fs-600); line-height: var(--lh-subheading); margin: 0 0 var(--space-3); font-weight: 600; }
+.message-bubble h2.wrap { line-height: var(--lh-subheading-wrap); }
+
+/* Quote style uses 28/36 (size 700 with wrap variant ratio producing 36 after snap) */
+blockquote { margin: var(--space-5) 0; padding: var(--space-3) var(--space-4); background: #fafafa; border-left: 4px solid var(--color-border-soft); font-size: var(--fs-700); line-height: 36px; font-style: italic; font-weight: 500; }
+
+/* Code block sample */
+pre, code { font-family: 'Aptos', 'SFMono-Regular', ui-monospace, monospace; line-height: var(--lh-code); font-size: var(--fs-300); }
+pre { background: #1e1e1e; color: #f5f5f5; padding: var(--space-3) var(--space-4); border-radius: 6px; overflow: auto; }
+
+/* Typography tier utility classes */
+.t-label { font-size: var(--fs-300); line-height: var(--lh-caption); font-weight: 500; color: #808080; margin: 0 0 var(--space-4); display: inline-flex; align-items: center; gap: 4px; }
+.t-label .label-chevron { display: inline-flex; line-height: 0; }
+.t-body { font-size: var(--fs-400); line-height: var(--lh-body); margin: 0 0 20px; color: var(--color-text-convo); }
+.t-body.loosen { line-height: var(--lh-body-loosen); }
+.t-subheading { font-size: var(--fs-500); line-height: var(--lh-subheading-sm); font-weight: 600; margin: var(--space-7) 0 var(--space-3); }
+.t-subheading.wrap { line-height: var(--lh-subheading-sm-wrap); }
+.t-heading { font-size: var(--fs-800); line-height: var(--lh-h4); font-weight: 600; margin: var(--space-8) 0 var(--space-4); }
+.t-heading.wrap { line-height: var(--lh-h4-wrap); }
+.t-display { font-size: var(--fs-1000); line-height: var(--lh-display); font-weight: 600; letter-spacing: -0.01em; margin: var(--space-9) 0 var(--space-5); }
+.t-display.wrap { line-height: var(--lh-display-wrap); }
+.t-quote { margin: 12px 0 18px; padding: 0; background: none; border-radius: 0; font-size: var(--fs-700); line-height: var(--lh-h5-wrap); font-style: italic; font-weight: 400; position: relative; text-align: center; color: var(--color-text); }
+.t-quote::before { content: none; }
+.t-quote-icon { display: block; margin: 0 auto 12px; width: 20px; height: 15px; }
+.t-quote-icon svg { display: block; width: 100%; height: 100%; }
+.t-list { margin: 0 0 var(--space-6); padding: 0 0 0 1.2em; list-style: disc; }
+.t-list li { margin: 0 0 var(--space-2); }
+.t-list li:last-child { margin-bottom: 0; }
+.ai-response .t-body:last-of-type { margin-bottom: 0; }
+.ai-response { max-width: 772px; }
+
+/* Stats section */
+.stats-section { margin: 0 auto 32px; }
+.stats-section .t-body { margin-bottom: 20px; }
+.stats-heading { font-size: var(--fs-500); line-height: var(--lh-subheading-sm); font-weight: 600; margin: 32px 0 8px; color: var(--color-text-convo); }
+.stats-list { border-top: 1px solid var(--color-border-soft); margin: 24px 0 0; padding: 0; }
+.stat-row { display: flex; gap: 56px; border-bottom: 1px solid var(--color-border-soft); padding: 30px 40px 30px 24px; align-items: flex-start; box-sizing: border-box; }
+.stat-value { font-family: 'Aptos Mono', 'Aptos', ui-monospace, monospace; font-size: var(--fs-1000); line-height: var(--lh-display); font-weight: 700; letter-spacing: -0.5px; flex: 0 0 200px; max-width: 200px; color: #1F1F1F; text-align: right; }
+.stat-desc { flex: 1; font-size: var(--fs-500); line-height: var(--lh-subheading-sm); color: var(--color-text-convo); }
+
+/* Prompt bar */
+/* Prompt / Composer */
+.prompt-bar { width: 100%; margin: 0; box-sizing: border-box; }
+
+/* Centering logic: when viewport empty we center absolutely; when messages exist we become sticky bottom */
+body.prompt-mode .prompt-bar { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; }
+body.conversation-mode .prompt-bar { position: sticky; bottom: 0; left: 0; right: 0; background: var(--color-bg-page); display: flex; justify-content: center; align-items: center; min-height: 184px; }
+
+.composer-container { width: var(--layout-composer); height: 184px; max-width: 100%; display: flex; align-items: center; justify-content: center; }
+.prompt-composer { width: var(--layout-composer-inner); max-width: 100%; display: flex; align-items: flex-end; gap: 0; background: transparent; }
+.prompt-track { margin: 0 16px; }
+.prompt-track { position: relative; flex: 1; display: flex; align-items: flex-end; }
+/* Prompt input now fluid via var(--fs-800); line-height uses ratios so it scales automatically */
+/* Prompt input uses dedicated prompt line-heights to avoid caret overlap (fs-800 20→32 vs line-height 28→44) */
+.prompt-input { flex: 1; resize: none; border: none; background: transparent; font: inherit; font-size: var(--fs-800); line-height: var(--lh-prompt); outline: none; padding: 0 40px 6px 0; border-bottom: 1px solid #1F1F1F; color: #1F1F1F; }
+.prompt-input.multi-line { line-height: var(--lh-prompt-wrap); }
+/* Conversation mode overrides: 20/24 base, 20/28 multiline */
+body.conversation-mode .prompt-input { font-size: var(--fs-500); line-height: var(--lh-prompt); color: #1F1F1F; }
+body.conversation-mode .prompt-input.multi-line { line-height: var(--lh-prompt-wrap); }
+.prompt-input::placeholder { color: var(--color-text-subtle); }
+
+.icon-btn { border: none; background: transparent; cursor: pointer; font-size: 16px; line-height: 1; color: #393939; padding: var(--space-1); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; }
+.icon-btn:hover { background: rgba(0,0,0,0.05); }
+
+.prompt-track .ico-mic { position: absolute; right: 0; bottom: 6px; background: transparent; }
+
+.circle-btn { width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; background: #F0F0F0; display: inline-flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; }
+.circle-btn .circle-icon { font-size: 16px; color: #393939; line-height: 1; }
+.circle-btn:hover { background: #e2e2e2; }
+.circle-btn.active { background: #3D3D3D; }
+.circle-btn.active:hover { background: #343434; }
+.circle-btn.active svg path { fill: #FFFFFF; }
+
+/* Scrollbar minimal */
+.viewport::-webkit-scrollbar { width: 10px; }
+.viewport::-webkit-scrollbar-track { background: transparent; }
+.viewport::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 8px; }
+
+/* Utility classes */
+.hidden { display: none !important; }
+
+/* Prototype: live viewport width indicator */
+.viewport-width-indicator { position: fixed; top: 4px; right: 8px; font-size: 16px; font-family: 'Aptos', system-ui, sans-serif; color: #808080; background: rgba(255,255,255,0.6); backdrop-filter: blur(4px); padding: 2px 8px; border-radius: 12px; z-index: 9999; line-height: 1.2; pointer-events: none; }
+
+/* Live font metrics tooltip */
+.font-metrics-tooltip { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); background: rgba(32,32,32,0.88); color: #FFFFFF; font-size: 12px; line-height: 1.2; font-family: 'Aptos Mono','Aptos',system-ui,sans-serif; padding: 4px 8px; border-radius: 6px; pointer-events: none; z-index: 10000; opacity: 0; transition: opacity 120ms ease; box-shadow: 0 2px 4px rgba(0,0,0,0.25); }
+.font-metrics-tooltip.visible { opacity: 1; }
+
+/* Responsive narrow adjustments */
+@media (max-width: 900px) {
+  .viewport { padding: var(--space-6) 0 var(--space-7); }
+  .prompt-inner { width: 100%; margin: 0 var(--space-4); }
+  .message-cluster { width: 100%; padding: 0 var(--space-4); }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://example.com/token.schema.json",
+  "comment": "Paragraph spacing tokens separate from line-height. Applied to block bottom margins.",
+  "paragraphSpacing": {
+    "none": 0,
+    "xs": "{space.xs}",
+    "sm": "{space.sm}",
+    "md": "{space.md}",
+    "lg": "{space.lg}",
+    "xl": "{space.xl}" 
+  }
+}

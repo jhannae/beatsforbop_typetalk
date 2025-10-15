@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" data-screen="prompt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Conversational Prototype</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="prompt-mode">
+  <div class="app" id="appRoot">
+    <!-- Main scroll container (response screen will add messages here) -->
+    <main class="viewport" id="viewport" aria-live="polite" aria-label="Conversation transcript">
+      <!-- Initially empty (prompt screen has no messages) -->
+    </main>
+
+    <!-- Prompt / Composer (centered in prompt mode, sticky bottom in conversation mode) -->
+    <form class="prompt-bar" id="promptForm" autocomplete="off" aria-label="Prompt composer">
+      <div class="composer-container">
+      <div class="prompt-composer" role="group">
+        <!-- Left icons -->
+        <button type="button" class="icon-btn ico-link" aria-label="Link" title="Link">
+          <svg width="24" height="24" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M34 14C39.5228 14 44 18.4772 44 24C44 29.4292 39.6733 33.8479 34.2799 33.9962L34 34H28.25C27.5596 34 27 33.4404 27 32.75C27 32.1028 27.4919 31.5705 28.1222 31.5065L28.25 31.5H34C38.1421 31.5 41.5 28.1421 41.5 24C41.5 19.9391 38.2725 16.632 34.2427 16.5039L34 16.5H28.25C27.5596 16.5 27 15.9404 27 15.25C27 14.6028 27.4919 14.0705 28.1222 14.0065L28.25 14H34ZM19.75 14C20.4404 14 21 14.5596 21 15.25C21 15.8972 20.5081 16.4295 19.8778 16.4935L19.75 16.5H14C9.85786 16.5 6.5 19.8579 6.5 24C6.5 28.0609 9.72747 31.368 13.7573 31.4961L14 31.5H19.75C20.4404 31.5 21 32.0596 21 32.75C21 33.3972 20.5081 33.9295 19.8778 33.9935L19.75 34H14C8.47715 34 4 29.5228 4 24C4 18.5708 8.32667 14.1521 13.7201 14.0038L14 14H19.75ZM13 22.75H35C35.6904 22.75 36.25 23.3096 36.25 24C36.25 24.6472 35.7581 25.1795 35.1278 25.2435L35 25.25H13C12.3096 25.25 11.75 24.6904 11.75 24C11.75 23.3528 12.2419 22.8205 12.8722 22.7565L13 22.75H35H13Z" fill="#242424"/>
+          </svg>
+        </button>
+        <button type="button" class="icon-btn ico-add" aria-label="Add" title="Add">
+          <svg width="24" height="24" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M24 5.25C24.6904 5.25 25.25 5.80964 25.25 6.5V22.75H41.5C42.1904 22.75 42.75 23.3096 42.75 24C42.75 24.6904 42.1904 25.25 41.5 25.25H25.25V41.5C25.25 42.1904 24.6904 42.75 24 42.75C23.3096 42.75 22.75 42.1904 22.75 41.5V25.25H6.5C5.80964 25.25 5.25 24.6904 5.25 24C5.25 23.3096 5.80964 22.75 6.5 22.75H22.75V6.5C22.75 5.80964 23.3096 5.25 24 5.25Z" fill="#242424"/>
+          </svg>
+        </button>
+        <div class="prompt-track">
+          <textarea id="promptInput" class="prompt-input" placeholder="Ask Copilot" rows="1" aria-label="Prompt input"></textarea>
+          <button type="button" class="icon-btn ico-mic" aria-label="Voice input" title="Voice">
+            <svg width="20" height="20" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <path d="M16 12C16 7.58172 19.5817 4 24 4C28.4183 4 32 7.58172 32 12V24C32 28.4183 28.4183 32 24 32C19.5817 32 16 28.4183 16 24V12ZM24 6.5C20.9624 6.5 18.5 8.96243 18.5 12V24C18.5 27.0376 20.9624 29.5 24 29.5C27.0376 29.5 29.5 27.0376 29.5 24V12C29.5 8.96243 27.0376 6.5 24 6.5ZM25 37.7148C32.2653 37.2021 38 31.1458 38 23.75C38 23.0596 37.4404 22.5 36.75 22.5C36.0596 22.5 35.5 23.0596 35.5 23.75C35.5 30.1013 30.3513 35.25 24 35.25C17.6487 35.25 12.5 30.1013 12.5 23.75C12.5 23.0596 11.9404 22.5 11.25 22.5C10.5596 22.5 10 23.0596 10 23.75C10 30.9752 15.4734 36.9221 22.5 37.6706V42.75C22.5 43.4404 23.0596 44 23.75 44C24.4404 44 25 43.4404 25 42.75V37.7148Z" fill="#242424"/>
+            </svg>
+          </button>
+        </div>
+        <button type="submit" id="eqSendBtn" class="circle-btn" aria-label="Compose action" title="Compose" disabled>
+          <span class="circle-icon" id="eqSendIcon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M11.9999 3C12.3796 3 12.6934 3.28215 12.743 3.64823L12.7499 3.75V20.25C12.7499 20.6642 12.4141 21 11.9999 21C11.6202 21 11.3064 20.7178 11.2567 20.3518L11.2499 20.25V3.75C11.2499 3.33579 11.5857 3 11.9999 3ZM8.25481 6C8.63451 6 8.9483 6.28215 8.99796 6.64823L9.00481 6.75V17.25C9.00481 17.6642 8.66902 18 8.25481 18C7.87511 18 7.56132 17.7178 7.51166 17.3518L7.50481 17.25V6.75C7.50481 6.33579 7.8406 6 8.25481 6ZM15.7449 6C16.1246 6 16.4384 6.28215 16.4881 6.64823L16.4949 6.75V17.25C16.4949 17.6642 16.1591 18 15.7449 18C15.3652 18 15.0514 17.7178 15.0018 17.3518L14.9949 17.25V6.75C14.9949 6.33579 15.3307 6 15.7449 6ZM4.75098 9C5.13067 9 5.44447 9.28215 5.49413 9.64823L5.50098 9.75V14.25C5.50098 14.6642 5.16519 15 4.75098 15C4.37128 15 4.05749 14.7178 4.00782 14.3518L4.00098 14.25V9.75C4.00098 9.33579 4.33676 9 4.75098 9ZM19.2521 9C19.6318 9 19.9456 9.28215 19.9952 9.64823L20.0021 9.75V14.2487C20.0021 14.6629 19.6663 14.9987 19.2521 14.9987C18.8724 14.9987 18.5586 14.7165 18.5089 14.3504L18.5021 14.2487V9.75C18.5021 9.33579 18.8378 9 19.2521 9Z" fill="#393939"/>
+            </svg>
+          </span>
+        </button>
+      </div> <!-- /.prompt-composer -->
+      </div> <!-- /.composer-container -->
+    </form>
+  </div>
+  <!-- Viewport width prototype indicator -->
+  <div id="vpWidth" class="viewport-width-indicator hidden" aria-hidden="true"></div>
+  <script src="./script.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "fluent-pilot": {
+      "type": "sse",
+      "url": "https://chat.fluentui.dev/sse"
+    }
+  }
+}

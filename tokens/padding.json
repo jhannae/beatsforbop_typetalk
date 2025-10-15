@@ -1,0 +1,16 @@
+{
+  "$schema": "https://example.com/token.schema.json",
+  "comment": "Atomic padding tokens referencing layout-space scale; not semantic presets.",
+  "padding": {
+    "none": { "y": 0, "x": 0 },
+    "inline-xs": { "x": "{space.xs}", "y": 0 },
+    "block-xs": { "y": "{space.xs}", "x": 0 },
+    "inset-xs": { "x": "{space.xs}", "y": "{space.xs}" },
+    "inset-sm": { "x": "{space.sm}", "y": "{space.sm}" },
+    "inset-md": { "x": "{space.md}", "y": "{space.md}" },
+    "inset-lg": { "x": "{space.lg}", "y": "{space.lg}" },
+    "inset-xl": { "x": "{space.xl}", "y": "{space.xl}" },
+    "inset-vertical-tight": { "y": "{space.xs}", "x": "{space.md}" },
+    "inset-vertical-relaxed": { "y": "{space.lg}", "x": "{space.md}" }
+  }
+}
