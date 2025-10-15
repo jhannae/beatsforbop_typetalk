@@ -174,7 +174,7 @@ body.conversation-mode .prompt-bar { position: sticky; bottom: 0; left: 0; right
 .prompt-track { position: relative; flex: 1; display: flex; align-items: flex-end; }
 /* Prompt input now fluid via var(--fs-800); line-height uses ratios so it scales automatically */
 /* Prompt input uses dedicated prompt line-heights to avoid caret overlap (fs-800 20→32 vs line-height 28→44) */
-.prompt-input { flex: 1; resize: none; border: none; background: transparent; font: inherit; font-size: var(--fs-800); line-height: var(--lh-prompt); outline: none; padding: 0 40px 6px 0; border-bottom: 1px solid #1F1F1F; color: #1F1F1F; overflow: hidden; box-sizing: border-box; }
+.prompt-input { flex: 1; resize: none; border: none; background: transparent; font: inherit; font-size: var(--fs-800); line-height: var(--lh-prompt); outline: none; padding: 0 40px 6px 0; border-bottom: 1px solid #1F1F1F; color: #1F1F1F; overflow-y: hidden; overflow-x: hidden; box-sizing: border-box; white-space: pre-wrap; }
 .prompt-input--autosize { transition: height 120ms ease; }
 .prompt-input--autosize::-webkit-scrollbar { display: none; }
 .prompt-input.multi-line { line-height: var(--lh-prompt-wrap); }

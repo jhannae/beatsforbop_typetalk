@@ -11,7 +11,10 @@ const arrowUpSvg = `\n<svg xmlns="http://www.w3.org/2000/svg" width="20" height=
 function autoResize() {
   // Allow unrestricted vertical growth (no internal scroll clipping)
   input.style.height = 'auto';
-  input.style.height = input.scrollHeight + 'px';
+  const fullScrollHeight = input.scrollHeight;
+  input.style.height = fullScrollHeight + 'px';
+  // Prevent internal scroll positioning from hiding top lines
+  input.scrollTop = 0;
   const singleLineHeight = 40; // approximate single-line height baseline
   if (input.scrollHeight > singleLineHeight * 1.25) {
     input.classList.add('multi-line');
@@ -47,11 +50,22 @@ input.addEventListener('input', () => {
 // Run initial sizing on load so placeholder line fits
 document.addEventListener('DOMContentLoaded', () => {
   autoResize();
+  // Observe changes to content via mutations (in case scripts inject text)
+  const observer = new MutationObserver(()=> autoResize());
+  observer.observe(input, { characterData: true, subtree: true, childList: true });
 });
 
 // Adjust again when window resizes (viewport width may change line-height clamp)
 window.addEventListener('resize', () => {
   autoResize();
+});
+
+// Additional events that may change scrollHeight without input event firing
+['keyup','paste','cut'].forEach(evt => {
+  input.addEventListener(evt, () => {
+    // Use microtask to wait for value update after paste/cut
+    queueMicrotask(autoResize);
+  });
 });
 
 // If fonts finish loading and metrics change, resync height
