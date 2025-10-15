@@ -11,8 +11,18 @@ const arrowUpSvg = `\n<svg xmlns="http://www.w3.org/2000/svg" width="20" height=
 
 function syncMirror() {
   if (!mirror) return;
-  // Mirror text with trailing newline to ensure last line height accounted
-  mirror.textContent = input.value.endsWith('\n') ? input.value + ' ' : input.value + '\n';
+  const val = input.value || '';
+  // If empty, mirror a single placeholder char to maintain one-line height only
+  if (val.length === 0) {
+    mirror.textContent = ' '; // single line baseline
+    return;
+  }
+  // Avoid forcing double line: only add trailing space if newline present at end
+  if (val.endsWith('\n')) {
+    mirror.textContent = val + ' '; // ensure final newline height counted
+  } else {
+    mirror.textContent = val;
+  }
 }
 
 function autoResize(enforceFrames = 0) {
@@ -22,6 +32,11 @@ function autoResize(enforceFrames = 0) {
   // Set height to mirror height (subtract padding already included in mirror styles) 
   input.style.height = 'auto';
   input.style.height = mirrorHeight + 'px';
+  // Ensure single-line baseline when empty
+  if (input.value.length === 0) {
+    const lhPx = Math.ceil(lh);
+    input.style.height = lhPx + 'px';
+  }
   input.scrollTop = 0;
   if (enforceFrames > 0) {
     requestAnimationFrame(() => autoResize(enforceFrames - 1));
