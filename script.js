@@ -1,7 +1,6 @@
 // Basic prototype logic: submit prompt, render response screen with sample content.
 const form = document.getElementById('promptForm');
 const input = document.getElementById('promptInput');
-const mirror = document.getElementById('promptMirror');
 const viewport = document.getElementById('viewport');
 const eqSendBtn = document.getElementById('eqSendBtn');
 const eqSendIcon = document.getElementById('eqSendIcon');
@@ -9,41 +8,20 @@ const vpWidthEl = document.getElementById('vpWidth');
 
 const arrowUpSvg = `\n<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">\n  <path d="M3.13171 9.16142C2.94553 9.36536 2.95993 9.68162 3.16387 9.8678C3.36781 10.054 3.68407 10.0396 3.87025 9.83564L9.50098 3.66779L9.50098 17.4985C9.50098 17.7747 9.72483 17.9985 10.001 17.9985C10.2771 17.9985 10.501 17.7747 10.501 17.4985L10.501 3.67068L16.1291 9.83564C16.3152 10.0396 16.6315 10.054 16.8354 9.8678C17.0394 9.68162 17.0538 9.36536 16.8676 9.16142L10.5536 2.24507C10.4258 2.10512 10.2583 2.02529 10.0851 2.00558C10.0578 2.00095 10.0296 1.99854 10.001 1.99854C9.9741 1.99854 9.94773 2.00066 9.922 2.00474C9.7461 2.02291 9.57544 2.10302 9.44576 2.24507L3.13171 9.16142Z" fill="white"/>\n</svg>`;
 
-function syncMirror() {
-  if (!mirror) return;
-  const val = input.value || '';
-  // If empty, mirror a single placeholder char to maintain one-line height only
-  if (val.length === 0) {
-    mirror.textContent = ' '; // single line baseline
-    return;
-  }
-  // Avoid forcing double line: only add trailing space if newline present at end
-  if (val.endsWith('\n')) {
-    mirror.textContent = val + ' '; // ensure final newline height counted
-  } else {
-    mirror.textContent = val;
-  }
-}
-
-function autoResize(enforceFrames = 0) {
-  syncMirror();
-  const lh = parseFloat(getComputedStyle(input).lineHeight) || 40;
-  const mirrorHeight = mirror ? mirror.scrollHeight : input.scrollHeight;
-  // Set height to mirror height (subtract padding already included in mirror styles) 
+function autoResize() {
+  // Remove cap so textarea keeps growing; hide native scrollbar.
   input.style.height = 'auto';
-  input.style.height = mirrorHeight + 'px';
-  // Ensure single-line baseline when empty
-  if (input.value.length === 0) {
-    const lhPx = Math.ceil(lh);
-    input.style.height = lhPx + 'px';
-  }
-  input.scrollTop = 0;
-  if (enforceFrames > 0) {
-    requestAnimationFrame(() => autoResize(enforceFrames - 1));
+  input.style.overflow = 'hidden';
+  input.style.height = input.scrollHeight + 'px';
+  const lh = parseFloat(getComputedStyle(input).lineHeight) || 40;
+  if (input.scrollHeight > lh * 1.25) {
+    input.classList.add('multi-line');
+  } else {
+    input.classList.remove('multi-line');
   }
 }
 input.addEventListener('input', () => {
-  autoResize(3);
+  autoResize();
   const hasText = input.value.trim().length > 0;
   if (hasText) {
     eqSendBtn.classList.add('active');
@@ -66,33 +44,6 @@ input.addEventListener('input', () => {
     }
   }
 });
-
-// Run initial sizing on load so placeholder line fits
-document.addEventListener('DOMContentLoaded', () => {
-  autoResize(5);
-  // Observe changes to content via mutations (in case scripts inject text)
-  const observer = new MutationObserver(()=> autoResize());
-  observer.observe(input, { characterData: true, subtree: true, childList: true });
-});
-
-// Adjust again when window resizes (viewport width may change line-height clamp)
-window.addEventListener('resize', () => {
-  autoResize(2);
-});
-
-// Additional events that may change scrollHeight without input event firing
-['keyup','paste','cut'].forEach(evt => {
-  input.addEventListener(evt, () => {
-    queueMicrotask(() => autoResize(3));
-  });
-});
-
-// If fonts finish loading and metrics change, resync height
-if (document.fonts && document.fonts.ready) {
-  document.fonts.ready.then(() => {
-    autoResize();
-  });
-}
 
 form.addEventListener('submit', e => {
   e.preventDefault();
