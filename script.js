@@ -44,6 +44,23 @@ input.addEventListener('input', () => {
   }
 });
 
+// Run initial sizing on load so placeholder line fits
+document.addEventListener('DOMContentLoaded', () => {
+  autoResize();
+});
+
+// Adjust again when window resizes (viewport width may change line-height clamp)
+window.addEventListener('resize', () => {
+  autoResize();
+});
+
+// If fonts finish loading and metrics change, resync height
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => {
+    autoResize();
+  });
+}
+
 form.addEventListener('submit', e => {
   e.preventDefault();
   if (!eqSendBtn.classList.contains('active')) return; // guard
